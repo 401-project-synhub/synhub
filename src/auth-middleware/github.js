@@ -14,9 +14,9 @@ module.exports = async function authorize(req, res, next) {
 
   try {
     let code = req.query.code;
-
+    // console.log(code);
     let remoteToken = await exchangeCodeForToken(code);
-
+    // console.log(remoteToken);
     let remoteUser = await getRemoteUserInfo(remoteToken);
 
     let [user, token] = await getUser(remoteUser);
@@ -29,7 +29,7 @@ module.exports = async function authorize(req, res, next) {
 };
 
 async function exchangeCodeForToken(code) {
-
+  // console.log(code);
   let tokenResponse = await superagent.post(tokenServerUrl).send({
     code: code,
     client_id: CLIENT_ID,
@@ -37,22 +37,24 @@ async function exchangeCodeForToken(code) {
     redirect_uri: API_SERVER,
     grant_type: 'authorization_code',
   });
+  // console.log(tokenResponse.body);
 
   let access_token = tokenResponse.body.access_token;
+  // console.log(access_token);
 
   return access_token;
 
 }
 
 async function getRemoteUserInfo(token) {
+  // console.log(token);
 
   let userResponse =
     await superagent.get(remoteAPI)
-      .set('user-agent', 'express-app')
-      .set('Authorization', `token ${token}`);
+      .set('Authorization', `token ${token}`)
+      .set('user-agent', 'express-app');
 
   let user = userResponse.body;
-
   return user;
 
 }
