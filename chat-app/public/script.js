@@ -1,0 +1,53 @@
+/* eslint-disable no-undef */
+// eslint-disable-next-line no-undef
+const socket = io('http://localhost:3000');
+const messageContainer = document.getElementById('message-container');
+const roomContainer = document.getElementById('room-container');
+
+
+
+
+function getEl(id) {
+  return document.getElementById(id);
+}
+const name = prompt('What is your name?');
+appendMessage('You joined');
+socket.emit('new-user', roomName, name);
+const editor = getEl('editor');
+editor.addEventListener('keyup', (evt) => {
+  const message = editor.value;
+  socket.emit('send-chat-message', roomName ,message);
+});
+
+
+
+socket.on('room-created', room => {
+  const roomElement = document.createElement('div');
+  roomElement.innerText = room;
+  const roomLink = document.createElement('a');
+  roomLink.href = `/${room}`;
+  roomLink.innerText = 'join';
+  roomContainer.append(roomElement);
+  roomContainer.append(roomLink);
+});
+
+socket.on('chat-message', data => {
+
+  editor.value=data.message;
+
+});
+
+socket.on('user-connected', name => {
+  appendMessage(`${name} connected`);
+});
+
+socket.on('user-disconnected', name => {
+  appendMessage(`${name} disconnected`);
+});
+
+function appendMessage(message) {
+  const messageElement = document.createElement('div');
+  messageElement.innerText = message;
+  messageContainer.append(messageElement);
+  
+}
