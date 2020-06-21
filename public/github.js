@@ -2,10 +2,10 @@
 let GithubURL = 'https://github.com/login/oauth/authorize';
 
 let options1 = {
-  client_id: '35e8de24061ca19f4296',
+  client_id: '12b0bde50779ac5c63c0',
   redirect_uri: 'http://localhost:3000/oauth',
   scope: 'read:user',
-  state: 'asldfjdfs',
+  // state: 'asldfjdfs',
 };
 
 let QueryString = Object.keys(options1).map((key) => {

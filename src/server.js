@@ -25,6 +25,6 @@ module.exports = {
   server:app, 
   start:port=>{
     const PORT = port ||3200;
-    app.listen(PORT,()=>console.log(`listening to port ${PORT}`));
+    app.listen(PORT,()=>console.log(`listening on port ${PORT}`));
   },
 };

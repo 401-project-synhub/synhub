@@ -70,8 +70,10 @@ async function getUser(remoteUser) {
     password: 'oauthpassword',
   };
 
-  let user = await users.save(userRecord);
-  let token = users.generateToken(user);
+  let newUser = new users(userRecord);
+  let user = await newUser.save(userRecord);
+  let token = newUser.generateToken(user);
+
 
   return [user, token];
 
