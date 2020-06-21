@@ -14,11 +14,8 @@ module.exports = async function authorize(req, res, next) {
 
   try {
     let code = req.query.code;
-    // console.log(req.query);//works
     let remoteToken = await exchangeCodeForToken(code);
-    // console.log(remoteToken);
     let remoteUser = await getRemoteUserInfo(remoteToken);
-    // console.log('booom')
     let [user, token] = await getUser(remoteUser);
     req.user = user;
     req.token = token;
@@ -40,14 +37,12 @@ async function exchangeCodeForToken(code) {
   console.log(tokenResponse.body);
 
   let access_token = tokenResponse.body.access_token;
-  // console.log(access_token);
 
   return access_token;
 
 }
 
 async function getRemoteUserInfo(token) {
-  // console.log(token);
 
   let userResponse =
     await superagent.get(remoteAPI)
