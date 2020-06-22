@@ -1,15 +1,20 @@
 'use strict';
 
-const express = require('express');
-const app = express();
-const server = require('http').Server(app);
+// const express = require('express');
+// const app = express();
+const app = require('../app.js').app;
+const express = require('../app.js').express;
+const server = require('../app.js').server;
 const io = require('socket.io')(server);
+const path = require('path');
 
+console.log(`hello from the chat server`);
 
 /////****\\\\\\
-app.set('views', './views');
+// app.set('views', './views');
+app.set('views', path.join(__dirname, 'views')); 
 app.set('view engine', 'ejs');
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 
 const rooms = { };
@@ -22,6 +27,7 @@ app.get('/coding', (req, res) => {
 
 // 
 app.post('/room', (req, res) => {
+  console.log(rooms[req.params.room]);
   if (rooms[req.body.room] != null) {
     return res.redirect('/');
   }
@@ -32,10 +38,13 @@ app.post('/room', (req, res) => {
 });
 
 app.get('/:room', (req, res) => {
-  if (rooms[req.params.room] == null) {
-    return res.redirect('/');
+  if(req.params.room !== 'api'){                 //find another way to do it 
+    console.log(rooms[req.params.room]);
+    if (rooms[req.params.room] == null) {
+      return res.redirect('/');
+    }
+    res.render('room', { roomName: req.params.room });
   }
-  res.render('room', { roomName: req.params.room });
 });
 
 
@@ -66,4 +75,4 @@ function getUserRooms(socket) {
   }, []);
 }
 
-server.listen(3000);
+// server.listen(3000);
