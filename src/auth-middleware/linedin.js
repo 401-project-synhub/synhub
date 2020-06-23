@@ -1,7 +1,7 @@
 'use strict';
 
 const superagent = require('superagent');
-const users = require('../models/user.js');
+const users = require('../../lib/model/user/user-model.js');
 
 
 const tokenServerUrl = process.env.TOKEN_SERVER_LINKEDIN;
@@ -59,21 +59,21 @@ async function getRemoteUserInfo(token) {
       .set('Authorization', `Bearer ${token}`);
 
   let user = userResponse.body;
-
+  console.log(user);
   return user;
 
 }
 
 async function getUser(remoteUser) {
   let userRecord = {
-    username: remoteUser.login,
+    username: remoteUser.localizedLastName,
     password: 'oauthpassword',
+    ranking: 'elite',
+    imgUrl: 'asdasdsadas',
   };
 
-  let newUser = new users(userRecord);
-  let user = await newUser.save(userRecord);
-  let token = newUser.generateToken(user);
-
+  let user = await users.create(userRecord);
+  let token = users.generateToken(user);
 
   return [user, token];
 

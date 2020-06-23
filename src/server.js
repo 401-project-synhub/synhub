@@ -10,8 +10,6 @@ const server = require('../app.js').server;
 const dataRoutes = require('../lib/routes/api-v1.js');
 
 
-require('../chat-app/coding-server.js');
-
 //requiring the routers 
 const router = require('./router/router.js');
 
@@ -23,8 +21,10 @@ app.use(express.json());
 app.use(cors());
 
 //requiring the routers 
-app.use('/',router);
+app.use('/', router);
 app.use('/api/v1', dataRoutes);
+
+require('../chat-app/coding-server.js');
 
 
 module.exports = {

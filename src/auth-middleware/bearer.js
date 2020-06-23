@@ -1,18 +1,22 @@
 'use strict';
-const users = require('../models/users');
+const users = require('../../lib/model/user/user-model.js');
 
 module.exports = (req, res, next)=>{
   if(!req.headers.authorization){
     next('Invalid Header');
   }else{
-    const [auth, token] =req.headers.authorization.split(' ');
-    if(auth ==='Bearer'){
+    const [auth, token] = req.headers.authorization.split(' ');
+    console.log('auth', auth);
+    console.log('token', token);
+
+    if(auth === 'Bearer'){
       users
         .authenticateToken(token)
-        .then(validUser=>{
+        .then(validUser => {
+          console.log('validUser', validUser);
           req.user = validUser;
           next();
-        }).catch(e=>next('Invalid login', e.message));
+        }).catch( e => next('Invalid login', e.message));
     }else{
       next('Invalid auth header');
     }

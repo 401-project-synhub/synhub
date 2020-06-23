@@ -27,7 +27,7 @@ app.get('/coding', (req, res) => {
 
 // 
 app.post('/room', (req, res) => {
-  console.log(rooms[req.params.room]);
+  // console.log(rooms[req.params.room]);
   if (rooms[req.body.room] != null) {
     return res.redirect('/');
   }
@@ -38,10 +38,12 @@ app.post('/room', (req, res) => {
 });
 
 app.get('/:room', (req, res) => {
-  if(req.params.room !== 'api'){                 //find another way to do it 
-    console.log(rooms[req.params.room]);
+  if(req.params.room !== 'api' && req.params.room !== 'oauth'){          //find another way to do it 
+    // console.log(rooms[req.params.room]);
     if (rooms[req.params.room] == null) {
-      return res.redirect('/');
+      return res.redirect(`/`);
+      // '';
+      // return res.json()
     }
     res.render('room', { roomName: req.params.room });
   }
