@@ -5,6 +5,17 @@ const messageContainer = document.getElementById('message-container');
 const roomContainer = document.getElementById('room-container');
 
 
+const messageForm = document.getElementById('send-container');
+const messageInput = document.getElementById('message-input');
+
+
+messageForm.addEventListener('submit', e => {
+  e.preventDefault();
+  const message = messageInput.value;
+  appendMessage(`You: ${message}`);
+  socket.emit('comment', roomName, message);
+  messageInput.value = '';
+});
 
 
 function getEl(id) {
@@ -36,6 +47,13 @@ socket.on('chat-message', data => {
   editor.value=data.message;
 
 });
+
+socket.on('send-comment', data => {
+  appendMessage(`${data.name}: ${data.message}`);
+  // editor.value=data.message;
+
+});
+
 
 socket.on('user-connected', name => {
   appendMessage(`${name} connected`);

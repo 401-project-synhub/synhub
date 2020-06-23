@@ -59,6 +59,9 @@ io.on('connection', socket => {
     socket.to(room).emit('chat-message', { message: message, name: rooms[room].users[socket.id] });
   });
  
+  socket.on('comment', (room, message) => {
+    socket.to(room).emit('send-comment', { message: message, name: rooms[room].users[socket.id] });
+  });
 
   socket.on('disconnect', () => {
     getUserRooms(socket).forEach(room => {
