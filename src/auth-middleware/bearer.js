@@ -1,6 +1,11 @@
 'use strict';
 const users = require('../../lib/model/user/user-model.js');
 
+/**
+ * Bearer Auth middleware
+ * @module bearer
+ */
+
 module.exports = (req, res, next)=>{
   if(!req.headers.authorization){
     next('Invalid Header');

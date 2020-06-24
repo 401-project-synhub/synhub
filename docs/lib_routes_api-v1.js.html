@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: lib/routes/api-v1.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,104 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: lib/routes/api-v1.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict';
+
+const express = require('express');
+const router = express.Router();
+const getModel = require('../middleware/model-finder.js');
+const bearerAuth = require('../../src/auth-middleware/bearer.js');
+const permissionAuth = require('../../src/auth-middleware/authorize.js');
+
+router.param('model', getModel);
+
+router.get('/:model', bearerAuth, getHandler);
+router.get('/:model/:id', getHandler);
+router.post('/:model', postHandler);
+router.put('/:model/:id', bearerAuth, permissionAuth('update'), updateHandler);
+router.delete('/:model/:id', bearerAuth, permissionAuth('delete'), deleteHandler);
 
 
-    <h3> </h3>
+/**
+* @function getHandler
+* @param req
+* @param res
+* @param next 
+*/
+
+function getHandler(req, res, next){
+  console.log(req.model);
+  req.model.read(req.params.id).then(records => {
+    console.log(`hi from the get handler on ${req.model}`);
+    let count = records.length;
+    res.json({count, records});
+  }).catch(err => {
+    next(err.message);
+  });
+}
 
 
+/**
+* @function postHandler
+* @param req
+* @param res
+* @param next 
+*/
 
+function postHandler(req, res, next){
+  req.model.create(req.body).then(record => {
+    res.json({record});
+  }).catch(err => {
+    next(err.message);
+  });
+}
 
+/**
+* @function updateHandler
+* @param req
+* @param res
+* @param next 
+*/
 
+function updateHandler(req, res, next){
+  req.model.update(req.params.id, req.body).then(record => {
+    res.json(record);
+  }).catch(err => {
+    next(err.message);
+  });
+}
 
+/**
+* @function deleteHandler
+* @param req
+* @param res
+* @param next 
+*/
 
+function deleteHandler(req, res, next){
+  req.model.delete(req.params.id).then(record => {
+    res.json({record});
+  }).catch(err => {
+    next(err.message);
+  });
+}
 
+/**
+ * router module 
+ * @module router
+ */
 
-
-    
-
-
-
-
-
+module.exports = router;</code></pre>
+        </article>
+    </section>
 
 
 

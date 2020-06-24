@@ -19,18 +19,39 @@ router.get('/linkedoauth',linkedinOauthMiddleware,oauthHandler);
 router.get('/signin', basicAuth, signInHandler);
 router.post('/signup', signUpHandler);
 
-//routes functions 
+
+/**
+* @function oauthHandler
+* @param req
+* @param res
+* @param next 
+*/
+
 function oauthHandler(req, res, next){
   res.json({
     token: req.token,
   });
 }
 
+/**
+* @function signUpHandler
+* @param req
+* @param res
+* @param next 
+*/
+
 function signInHandler(req, res, next){
   res.json({
     token: req.token,
   });
 }
+
+/**
+* @function signUpHandler
+* @param req
+* @param res
+* @param next 
+*/
 
 function signUpHandler(req, res, next){
   users.createUser(req.body).then(token => {
@@ -39,4 +60,10 @@ function signUpHandler(req, res, next){
     res.status(403).send(err);
   });
 }
+
+/**
+ * router module 
+ * @module router
+ */
+
 module.exports = router;

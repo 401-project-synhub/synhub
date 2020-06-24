@@ -10,6 +10,11 @@ const CLIENT_ID = process.env.CLIENT_ID_LINKEDIN;
 const CLIENT_SECRET = process.env.CLIENT_SECRET_LINKEDIN;
 const API_SERVER = process.env.API_SERVER_LINKEDIN;
 
+/**
+ * LinkedIn Oauth middleware
+ * @module LinkedIn
+ */
+
 module.exports = async function authorize(req, res, next) {
 
   try {

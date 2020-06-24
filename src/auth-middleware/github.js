@@ -19,6 +19,11 @@ const API_SERVER = process.env.API_SERVER_GITHUB;
 console.log('API_SERVER', API_SERVER);
 
 
+/**
+ * GitHub Oauth middleware
+ * @module github
+ */
+
 module.exports = async (req, res, next) => {
   console.log('hello from github');
 
