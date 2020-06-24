@@ -17,6 +17,7 @@ const router = require('./router/router.js');
 
 app.use(morgan('dev'));
 app.use(express.json());
+app.use('/docs', express.static('./docs'));
 // app.use(express.static('./public'));
 app.use(cors());
 
@@ -26,6 +27,11 @@ app.use('/api/v1', dataRoutes);
 
 require('../chat-app/coding-server.js');
 
+
+/**
+ * Server module with start  the server listening 
+ * @module server
+ */
 
 module.exports = {
   // server:app, 
