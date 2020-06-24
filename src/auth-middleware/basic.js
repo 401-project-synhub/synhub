@@ -18,8 +18,9 @@ module.exports = (req, res, next) => {
       .basicAuth(userObj)
       .then((isValid) => {
         console.log('isValid', isValid);
+        console.log('isValid.username', isValid[0].username);
         if (isValid) {
-          req.token = userSchema.generateToken(isValid);
+          req.token = userSchema.generateToken(isValid[0]);
           next();
         }
         else {
