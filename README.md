@@ -1,4 +1,4 @@
-# synhub
+# SynHub
 
 - Project Name: SynHub
 
@@ -25,9 +25,20 @@
 - As an admin, I want to have the opportunity to create rooms.
 - As an admin, I want to have the opportunity to delete an unwanted room/question/answer.
 
+- Endpoints
+
+- [API Docs](https://app.swaggerhub.com/apis/Tommalieh/SynHub/0.1)
+
+![Endpoints](routes.PNG)
+
 
 - DB Relationship Diagram
 
-![relationships](commdb_480.png)
+![UML](uml.png)
+![relationships](Communitydb.jpg)
 ![Questions Schema](db-schema-questions.png)
 ![Users Schema](db-schema-user.PNG)
+
+- Tests 
+
+![Tests](testtsss.png)
