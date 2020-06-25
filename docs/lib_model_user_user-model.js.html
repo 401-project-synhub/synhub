@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: lib/model/user/user-model.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: lib/model/user/user-model.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict';
+
+const schema = require('./user-schema.js');
+const Model = require('../model.js');
+const bcrypt = require('bcryptjs'); 
+const jwt = require('jsonwebtoken'); 
+const SECRET = process.env.SECRET || 'batool123';
+
+
+/**
+  * @class User
+   */
+
+class User extends Model {
+  /**
+   * @constant
+   */
+  constructor() {
+    super(schema);
+  }
+
+  /**
+   * createUser
+   * @param {object} record 
+   * @returns {object} userObject
+   */
+
+  async createUser(record){
+
+    try {
+
+      const result = await this.readOne({ username: record.username });
+      console.log('result', result);
+
+      if (result.length === 0) {
+        const newRecord = await this.create(record);
+        console.log('newRecord', newRecord);
+        return {token: this.generateToken(newRecord), message: 'signed up'};
+      }
+      else {
+        return {token: {result}, message: 'signed in'};
+      }
+    } catch (err) {
+      return err;
+    }
+  }
+
+  /**
+   * basicAuth
+   * @param {object} userObj 
+   * @returns {boolean} 
+   */
+  
+  basicAuth(userObj){
+    let username = { username: userObj.username };
+    return this.readOne(username)
+      .then(user => {
+        if(user){
+          console.log('user', user);
+          return this.passwordComparator(user ,userObj.password);
+        }
+        else{
+          Promise.reject('Please SignUp First');
+        }
+      })
+      .catch(console.error);
+  }
+
+  /**
+   * passwordComparator
+   * @param {object} user
+   * @param {string} pass 
+   * @returns {boolean} 
+   */
+  async passwordComparator(user, pass){
+    console.log('userpassowrd', user.password);
+
+    console.log('userpassowrd', user[0].password);
+    
+    return await bcrypt.compare(pass, user[0].password)
+      .then(valid => {
+        console.log(this);
+        return valid ? this : null;
+      });
+  }
+
+
+  /**
+   * generateToken
+   * @param {object} user
+   * @returns {object} token 
+   */
+  generateToken(user){
+    console.log('jwtuser' ,user);
+    // let capabilities= this.can(this.role);
+    let token = 
+    // jwt.sign({  role: this.role, id:this._id ,user:this.username,capabilities: capabilities ,expiresIn:  900000, algorithm:  'RS256' }, SECRET);  return token;
+    jwt.sign({  id: user._id, username: user.username, capabilities:user.capabilities, expiresIn: 900000, algorithm: 'RS256' }, SECRET);
+    console.log('jwtToken', token);
+    return token;
+  
+  }
+
+  /**
+   * authenticateToken
+   * @param {object} token
+   * @returns {object} tokenObject
+   */
+  async authenticateToken(token){
+
+    try {
+      console.log('jwtverify',jwt.verify('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlZjIzZWZjYWQwNWRiMWRkZjNjMGVjMSIsInVzZXJuYW1lIjoieW91c2VmMyIsImV4cGlyZXNJbiI6OTAwMDAwLCJhbGdvcml0aG0iOiJSUzI1NiIsImlhdCI6MTU5MjkzNDE0MH0.5fWcK_i6C_tkY5jtJZI8oHyrc0pFrZ3ah_5HuiQLnKg', SECRET));
+      let tokenObject = await jwt.verify(token, SECRET);
+      console.log('tokenObject', tokenObject);
+      console.log('tokenObject.username', tokenObject.username);
+
+      if (tokenObject.username) {
+        return Promise.resolve(tokenObject);
+      } else {
+        return Promise.reject('User is not found!');
+      }
+    }catch(e){
+      return Promise.reject(e.message);
+    }
+  }
+}
+
+module.exports = new User();</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Answer.html">Answer</a></li><li><a href="module-answers.html">answers</a></li><li><a href="module-authorize.html">authorize</a></li><li><a href="module-basic.html">basic</a></li><li><a href="module-bearer.html">bearer</a></li><li><a href="module-github.html">github</a></li><li><a href="module-LinkedIn.html">LinkedIn</a></li><li><a href="module-Model.html">Model</a></li><li><a href="module-Question.html">Question</a></li><li><a href="module-questions.html">questions</a></li><li><a href="module-Role.html">Role</a></li><li><a href="module-roles.html">roles</a></li><li><a href="module-router.html">router</a></li><li><a href="module-server.html">server</a></li><li><a href="module-user.html">user</a></li></ul><h3>Classes</h3><ul><li><a href="Answer.html">Answer</a></li><li><a href="module-Model-Model.html">Model</a></li><li><a href="Question.html">Question</a></li><li><a href="Role.html">Role</a></li><li><a href="global.html#User">User</a></li></ul><h3>Global</h3><ul><li><a href="global.html#deleteHandler">deleteHandler</a></li><li><a href="global.html#getHandler">getHandler</a></li><li><a href="global.html#getModel">getModel</a></li><li><a href="global.html#oauthHandler">oauthHandler</a></li><li><a href="global.html#postHandler">postHandler</a></li><li><a href="global.html#signUpHandler">signUpHandler</a></li><li><a href="global.html#updateHandler">updateHandler</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Wed Jun 24 2020 14:19:34 GMT+0300 (Eastern European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
