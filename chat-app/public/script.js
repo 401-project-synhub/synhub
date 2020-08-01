@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 // eslint-disable-next-line no-undef
-const socket = io('http://localhost:3000');
+const socket = io('http://localhost:4000');
 const messageContainer = document.getElementById('message-container');
 const roomContainer = document.getElementById('room-container');
 
@@ -42,18 +42,20 @@ socket.on('room-created', room => {
   roomContainer.append(roomLink);
 });
 
+
+// socket.on('comment', (room, message) => {
+//   socket.to(room).emit('send-comment', { message: message, name: rooms[room].users[socket.id] });
+// });
+
 socket.on('chat-message', data => {
-
+  console.log(data.message,'from chat backend');
   editor.value=data.message;
-
 });
 
-socket.on('send-comment', data => {
-  appendMessage(`${data.name}: ${data.message}`);
-  // editor.value=data.message;
-
-});
-
+// socket.on('send-comment', data => {
+//   appendMessage(`${data.name}: ${data.message}`);
+//   // editor.value=data.message;
+// });
 
 socket.on('user-connected', name => {
   appendMessage(`${name} connected`);
@@ -67,5 +69,4 @@ function appendMessage(message) {
   const messageElement = document.createElement('div');
   messageElement.innerText = message;
   messageContainer.append(messageElement);
-  
 }
