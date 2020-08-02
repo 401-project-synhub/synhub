@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 // eslint-disable-next-line no-undef
-const socket = io('http://localhost:4000');
+const socket = io('https://synhub.herokuapp.com');
 const messageContainer = document.getElementById('message-container');
 const roomContainer = document.getElementById('room-container');
 
