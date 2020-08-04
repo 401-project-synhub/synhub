@@ -104,6 +104,7 @@ io.on('connection', socket => {
     socket.to(room).emit('toggle-paint', { message: message});
     // io.emit('chat-message', { message: message, name: rooms[room].users[socket.id] });
     // io.to(room).emit('chat-message', { message: message, name: rooms[room].users[socket.id] });
+    // console.log('hello');
   });
 
   socket.on('send-chat-message-css', (room, message) => {
