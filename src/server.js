@@ -19,7 +19,9 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use('/docs', express.static('./docs'));
 // app.use(express.static('./public'));
-app.use(cors());
+app.use(cors({
+  origin: '*'
+}));
 
 //requiring the routers 
 app.use('/', router);
